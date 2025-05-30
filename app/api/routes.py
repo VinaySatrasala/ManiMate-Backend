@@ -1,18 +1,17 @@
 from fastapi import APIRouter, HTTPException
-from core.llm_config import LangchainLLMConfig
-
+from app.core.app import App
 router = APIRouter()
-config = LangchainLLMConfig()
-llm = config.langchain_llm  # ✅ Don't call it as a method
+
 
 @router.post("/generate")
 def generate_video(prompt: str):
     if not prompt:
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
     
-    response = llm.invoke(prompt)  # You can also wrap this in try/except for safety
+    app = App()
+    app.set_prompt(prompt)
     return {
         "message": "Video generation started",
         "prompt": prompt,
-        "response": response
+        "response": app.generate_script()
     }
