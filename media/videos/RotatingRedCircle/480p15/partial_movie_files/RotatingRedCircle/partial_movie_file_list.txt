@@ -1,2 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/RotatingRedCircle/480p15/partial_movie_files/RotatingRedCircle/1185818338_989511694_1945078627.mp4'

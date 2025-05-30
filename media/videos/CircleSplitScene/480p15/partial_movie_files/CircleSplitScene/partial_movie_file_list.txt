@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CircleSplitScene/480p15/partial_movie_files/CircleSplitScene/1185818338_3585413816_223132457.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CircleSplitScene/480p15/partial_movie_files/CircleSplitScene/624642324_1432596116_1695191476.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CircleSplitScene/480p15/partial_movie_files/CircleSplitScene/624642324_303932407_829653792.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CircleSplitScene/480p15/partial_movie_files/CircleSplitScene/624642324_1432596116_811789108.mp4'

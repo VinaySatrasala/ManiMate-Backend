@@ -1,9 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/1185818338_2495826161_223132457.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_2063923934_1534413457.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_1432596116_2200051200.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_2672571098_3043746379.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_1432596116_3858415229.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_1578116791_4199736581.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_1432596116_2589493031.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/ConicSections/480p15/partial_movie_files/ConicSections/624642324_3002759906_1743846582.mp4'

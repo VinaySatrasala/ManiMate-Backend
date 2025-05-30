@@ -1,5 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CrossArrowBoxes/480p15/partial_movie_files/CrossArrowBoxes/1185818338_2014947554_223132457.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CrossArrowBoxes/480p15/partial_movie_files/CrossArrowBoxes/624642324_197085703_2762945241.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CrossArrowBoxes/480p15/partial_movie_files/CrossArrowBoxes/624642324_2396116446_2494152720.mp4'
-file 'file:C:/Users/284706/Documents/CursonForManim/ManiMate/media/videos/CrossArrowBoxes/480p15/partial_movie_files/CrossArrowBoxes/624642324_1432596116_3207734570.mp4'
