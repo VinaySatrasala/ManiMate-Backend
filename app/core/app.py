@@ -5,19 +5,17 @@ import re
 import shutil
 from app.services.prompt_processor import PromptProcessor
 from app.core.llm_config import LangchainLLMConfig
-
+from app.core.chat_application import ChatApplication
 
 class App:
     def __init__(self):
         self.llm_config = LangchainLLMConfig()
         self.llm = self.llm_config.langchain_llm
+        self.chatapp = ChatApplication()
+        self.chatapp.initialize()
 
-    def set_prompt(self, prompt: str):
-        """Set the user prompt for visualization."""
-        prompt_processor = PromptProcessor(prompt)
-        self.prompt = prompt_processor.build_prompt()
-
-    # Sub process to run the script
+    def set_prompt(self,prompt):
+        self.prompt = prompt
 
     def run_script(self, script_path: str):
         """Run the generated Manim script using subprocess."""
@@ -49,12 +47,13 @@ class App:
 
     def generate_script(self) -> str:
         """Generate the Manim script based on the current prompt and save it to a file."""
-        if not hasattr(self, 'prompt'):
-            raise ValueError(
-                "Prompt not set. Please set a prompt before generating the script.")
 
-        raw_response = self.llm.invoke(self.prompt)
 
+        raw_response = self.chatapp.chat("manim",self.prompt)
+        print("Raw response before JSON parsing:", raw_response)
+
+        if not raw_response:
+            raise ValueError("LLM returned an empty response.")
         # Parse JSON if response is stringified
         if isinstance(raw_response, str):
             raw_response = json.loads(raw_response)
