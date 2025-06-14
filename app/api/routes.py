@@ -4,8 +4,10 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pathlib import Path
 
-from app.core.app import App
+from app.core.app_instance import app_instance
 from app.models.schema import PromptSchema
+
+app = app_instance
 
 router = APIRouter()
 
@@ -16,8 +18,6 @@ def generate_video(request : PromptSchema):
     prompt = request.prompt
     if not prompt:
         raise HTTPException(status_code=400, detail="Prompt cannot be empty")
-    
-    app = App()
     app.set_prompt(prompt)
     response = app.generate_script()
     return {
