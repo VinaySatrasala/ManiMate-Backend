@@ -103,7 +103,7 @@ def delete_session(
         raise HTTPException(
             status_code=400, detail="Session ID cannot be empty")
     
-    app_context.db_manager.delete_session_messages(session_id=session_id, user_id=user.id)
+    app_context.db_manager.delete_session(session_id=session_id, user_id=user.id)
     return {
         "message": "Session deleted successfully"
     }

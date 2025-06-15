@@ -175,14 +175,17 @@ class DatabaseManager:
         finally:
             db.close()
 
-    def delete_session_messages(self, session_id: str, user_id: str):
+    def delete_session(self, session_id: str, user_id: str):
         """Delete all messages for a session (verifying ownership)"""
         db = self.get_session()
         try:
             self.verify_session_ownership(db, session_id, user_id)
-            deleted = db.query(ChatMessage).filter_by(session_id=session_id).delete()
-            db.commit()
-            logger.info(f"Deleted {deleted} messages for session {session_id} (user {user_id})")
+            session_obj = db.query(ChatSession).filter_by(id=session_id).first()
+            if session_obj:
+                db.delete(session_obj)
+                db.commit()
+
+            logger.info(f"Deleted {session_obj} messages for session {session_id} (user {user_id})")
         except Exception as e:
             db.rollback()
             logger.error(f"Failed to delete messages for session {session_id}, user {user_id}: {e}")

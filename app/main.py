@@ -14,7 +14,7 @@ app.mount("/videos", StaticFiles(directory="static/videos"), name="videos")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins
+    allow_origins=["http://localhost:5173"],  # Allow all origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
