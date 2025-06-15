@@ -50,11 +50,11 @@ class App:
         shutil.move(str(src), str(dest))
         logger.info(f"Video moved to: {dest}")
 
-    def generate_script(self,user_id : str) -> dict:
+    def generate_script(self,session_id : str ,user_id : str) -> dict:
         if not self.prompt:
             raise ValueError("Prompt not set. Call set_prompt(prompt) before generate_script().")
 
-        raw_response = self.chatapp.chat(session_id="manim-temp", user_id=user_id,user_input=self.prompt)
+        raw_response = self._chatapp.chat(session_id=session_id, user_id=user_id,user_input=self.prompt)
         logger.debug("Raw LLM response received.")
 
         if not raw_response:

@@ -28,26 +28,7 @@ class ChatApplication:
         self.chat_service = chat_service
         self.sync_service = sync_service
         self.system_prompt = build_prompt()
-
-    # def initialize(self):
-    #     """Initialize all components"""
-    #     self.db_manager = DatabaseManager(self.config.database.postgres_url)
-    #     self.redis_manager = RedisManager(
-    #         host=self.config.redis.host,
-    #         port=self.config.redis.port,
-    #         db=self.config.redis.db
-    #     )
-    #     self.memory_manager = MemoryManager(self.db_manager, self.redis_manager)
-
-    #     self.chat_service = ChatService(
-    #         memory_manager=self.memory_manager,
-    #         system_prompt=self.system_prompt
-    #     )
-
-    #     self.sync_service = SyncService(memory_manager=self.memory_manager)
-
-    #     logger.info("✅ Chat application initialized successfully!")
-
+        
     def chat(self, session_id: str, user_id: str, user_input: str) -> str:
         """Send a message and get response"""
         if not self.chat_service:

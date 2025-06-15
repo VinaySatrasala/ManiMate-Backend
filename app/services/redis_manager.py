@@ -17,7 +17,7 @@ class RedisManager:
     def serialize_message(self, message: Union[AIMessage, HumanMessage]) -> str:
         """Converts a HumanMessage or AIMessage to JSON."""
         return json.dumps({
-            "type": "user" if isinstance(message, HumanMessage) else "ai",
+            "type": "human" if isinstance(message, HumanMessage) else "ai",
             "content": message.content
         })
 
@@ -39,7 +39,7 @@ class RedisManager:
         self.client.ltrim(redis_key, -20, -1)  # Keep only last 20 messages
 
         # Save to DB
-        self.db_manager.save_message(session_id=session_id, user_id=user_id, role=message.type, content=message.content)
+        # self.db_manager.save_message(session_id=session_id, user_id=user_id, role=message.type, content=message.content)
 
     def session_exists(self, session_id: str, user_id: str) -> bool:
         """Check if a Redis history exists for this user’s session."""

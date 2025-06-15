@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 class PromptSchema(BaseModel):
     prompt : str
+    session_id : str
 
 class VideoSchema(BaseModel):
     filename : str

@@ -12,10 +12,12 @@ from app.utils.system_prompt import build_prompt
 class AppContext:
     def __init__(self):
         self.config = get_default_config()
+        self.system_prompt = build_prompt()
 
         self.db_manager = DatabaseManager(self.config.database.postgres_url)
 
         self.redis_manager = RedisManager(
+            db_manager=self.db_manager,
             host=self.config.redis.host,
             port=self.config.redis.port,
             db=self.config.redis.db
@@ -25,7 +27,7 @@ class AppContext:
             self.db_manager, self.redis_manager)
 
         self.chat_service = ChatService(
-            memory_manger=self.memory_manager,
+            memory_manager = self.memory_manager,
             system_prompt=self.system_prompt
         )
         self.sync_service = SyncService(
@@ -39,7 +41,6 @@ class AppContext:
             sync_service=self.sync_service
         )
         
-        self.system_prompt = build_prompt()
 
 
 # Create a shared instance

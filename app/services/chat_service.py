@@ -41,11 +41,11 @@ class ChatService:
         response_message = self.llm.invoke(messages)
 
         # Step 4: Save messages
-        self.memory_manager.save_message(session_id=session_id, user_id=user_id, role="user", content=user_input)
+        self.memory_manager.save_message(session_id=session_id, user_id=user_id, role="human", content=user_input)
         self.memory_manager.save_message(session_id=session_id, user_id=user_id, role="ai", content=response_message.content)
 
         logger.info(f"AI response saved for session '{session_id}'")
-        return response_message.content
+        return response_message
 
     def get_conversation_history(self, session_id: str, user_id: str) -> List:
         """

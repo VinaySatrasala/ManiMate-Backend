@@ -23,28 +23,57 @@ class DatabaseManager:
     def get_session(self) -> Session:
         return self.SessionLocal()
     
-    def create_user(self,user_data):
-        db = self.get_session()
-        new_user = User(
-            id=str(uuid.uuid4()),
-            user_name=user_data.user_name,
-            password=user_data.password,
-            name=user_data.name
-        )
-        db.add(new_user)
-        db.commit()
-        return new_user
-    
-    def user_exists(self) -> bool:
+    def create_user(self, user_data) -> dict:
         db = self.get_session()
         try:
-            user = db.query(User).filter_by(user_name=user_data.user_name).first()
+            new_user = User(
+                id=str(uuid.uuid4()),
+                user_name=user_data.user_name,
+                password=user_data.password,
+                name=user_data.name
+            )
+            db.add(new_user)
+            db.commit()
+
+            return {
+                "id": new_user.id,
+                "user_name": new_user.user_name,
+                "name": new_user.name
+            }
+        except Exception as e:
+            db.rollback()
+            logger.error(f"Failed to create user: {e}")
+            raise
+        finally:
+            db.close()
+
+    
+    def user_exists(self,user_name) -> bool:
+        db = self.get_session()
+        try:
+            user = db.query(User).filter_by(user_name=user_name).first()
             return user is not None
         except Exception as e:
             logger.error(f"Error checking user existence: {e}")
             raise
+    
+    def get_password_hash(self, user_name: str) -> Optional[str]:
+        """Retrieve the hashed password for a user by username"""
+        db = self.get_session()
+        try:
+            user = db.query(User).filter_by(user_name=user_name).first()
+            if not user:
+                logger.warning(f"User {user_name} not found")
+                return None
+            return user.password
+        except Exception as e:
+            logger.error(f"Error retrieving password hash for {user_name}: {e}")
+            raise
+        finally:
+            db.close()
+        
 
-    def create_session(self, session_id: str, user_id: str) -> ChatSession:
+    def create_session(self, session_name: str, user_id: str) -> ChatSession:
         """Create a new chat session for a user (max 10 sessions allowed)"""
         db = self.get_session()
         try:
@@ -55,16 +84,22 @@ class DatabaseManager:
             if user.sessions_count >= 10:
                 raise Exception("Maximum session limit (10) reached for this user.")
 
-            session = ChatSession(id=session_id, user_id=user_id)
+            session = ChatSession(id=str(uuid.uuid4()), name = session_name,user_id=user_id)
             db.add(session)
             user.sessions_count += 1
             db.commit()
 
-            logger.info(f"Created chat session {session_id} for user {user_id}")
-            return session
+            logger.info(f"Created chat session {session_name} for user {user_id}")
+            return {
+                "id": session.id,
+                "name": session.name,
+                "user_id": session.user_id,
+                "created_at": session.created_at.isoformat(),
+                "prompts_count": session.prompts_count
+            }
         except Exception as e:
             db.rollback()
-            logger.error(f"Failed to create chat session {session_id}: {e}")
+            logger.error(f"Failed to create chat session {session_name}: {e}")
             raise
         finally:
             db.close()
@@ -86,7 +121,20 @@ class DatabaseManager:
             raise
         finally:
             db.close()
-
+    def get_user_sessions(self, user_id: str) -> List[ChatSession]:
+        """Retrieve all chat sessions for a user"""
+        db = self.get_session()
+        try:
+            sessions = db.query(ChatSession).filter_by(user_id=user_id).all()
+            if not sessions:
+                logger.warning(f"No sessions found for user {user_id}")
+            return sessions
+        except Exception as e:
+            logger.error(f"Error fetching sessions for user {user_id}: {e}")
+            raise
+        finally:
+            db.close()
+    
     def save_message(self, session_id: str, user_id: str, role: str, content: str) -> ChatMessage:
         """Save a message to a session, verifying ownership and prompt limit"""
         db = self.get_session()

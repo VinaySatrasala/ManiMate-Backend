@@ -23,7 +23,7 @@ class MemoryManager:
         history = []
 
         for message in messages:
-            temp = HumanMessage(content=message.content) if message.role == "user" else AIMessage(content=message.content)
+            temp = HumanMessage(content=message.content) if message.role == "human" else AIMessage(content=message.content)
             history.append(temp)
             self.redis_manager.save_message(session_id=session_id, user_id=user_id, message=temp)
 
@@ -33,7 +33,7 @@ class MemoryManager:
         """
         Saves a single chat message to both Redis and the database.
         """
-        message = HumanMessage(content=content) if role == "user" else AIMessage(content=content)
+        message = HumanMessage(content=content) if role == "human" else AIMessage(content=content)
         self.redis_manager.save_message(session_id=session_id, user_id=user_id, message=message)
         self.database_manager.save_message(session_id=session_id, user_id=user_id, role=role, content=content)
 
@@ -62,7 +62,7 @@ class MemoryManager:
                     self.database_manager.delete_session_messages(session_id=session_id, user_id=user_id)
 
                 for msg in messages:
-                    role = "user" if isinstance(msg, HumanMessage) else "ai"
+                    role = "human" if isinstance(msg, HumanMessage) else "ai"
                     self.database_manager.save_message(session_id=session_id, user_id=user_id, role=role, content=msg.content)
 
                 print(f"[✓] Synced session {session_id} for user {user_id} from Redis to DB.")

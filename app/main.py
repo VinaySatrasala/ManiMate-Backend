@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router as api_router
 from fastapi.staticfiles import StaticFiles
-from app.core.app_instance import app_instance
+from app.api.auth_router import router as auth_router
 
 app = FastAPI(
     title="Manim AI Backend",
@@ -21,7 +21,5 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+app.include_router(auth_router)
 
-@app.on_event("startup")
-def initialize_app():
-    app_instance.chatapp.initialize()  # Only once at startup
