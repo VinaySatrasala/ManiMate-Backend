@@ -3,11 +3,12 @@ from fastapi import APIRouter, Depends, HTTPException, Body
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from pathlib import Path
-
+ 
 from app.core.app_instance import app_instance
 from app.core.app_context import app_context
 from app.models.schema import PromptSchema
 from app.utils.auth import *
+from app.utils.exceptions import SessionLimitReachedException
 app = app_instance
 
 router = APIRouter()
@@ -20,8 +21,10 @@ class VideoSchema(BaseModel):
 class SessionSchema(BaseModel):
     session_name: str
 
+
 class SessionIdSchema(BaseModel):
     session_id: str
+
 
 @router.post("/create-session")
 def create_session(
@@ -32,13 +35,18 @@ def create_session(
     if not session_name:
         raise HTTPException(
             status_code=400, detail="Session name cannot be empty")
-    response = app_context.db_manager.create_session(
-        session_name=session_name, user_id=user.id)
-    return {
-        "message": "Session created successfully",
-        "session": response
-    }
+    try:
+        session_data = app_context.db_manager.create_session(session_name, user.id)
+        return {"success": True, "session": session_data}
+    
+    except ValueError as ve:
+        raise HTTPException(status_code=404, detail=str(ve))
 
+    except SessionLimitReachedException as sle:
+        raise HTTPException(status_code=400, detail=str(sle))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error.")
 
 @router.get("/sessions")
 def get_sessions(
@@ -50,7 +58,7 @@ def get_sessions(
     sessions = app_context.db_manager.get_user_sessions(user_id=user.id)
     if not sessions:
         raise HTTPException(status_code=404, detail="No sessions found")
-    
+
     return {
         "message": "Sessions retrieved successfully",
         "sessions": [session for session in sessions]
@@ -102,8 +110,9 @@ def delete_session(
     if not session_id:
         raise HTTPException(
             status_code=400, detail="Session ID cannot be empty")
-    
-    app_context.db_manager.delete_session(session_id=session_id, user_id=user.id)
+
+    app_context.db_manager.delete_session(
+        session_id=session_id, user_id=user.id)
     return {
         "message": "Session deleted successfully"
     }

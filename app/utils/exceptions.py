@@ -1,0 +1,2 @@
+class SessionLimitReachedException(Exception):
+    pass

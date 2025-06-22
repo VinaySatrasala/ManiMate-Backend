@@ -4,7 +4,7 @@ from typing import List, Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from app.models.db_models import Base, ChatSession, ChatMessage, User
-
+from app.utils.exceptions import SessionLimitReachedException
 # Set up logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -82,7 +82,7 @@ class DatabaseManager:
                 raise ValueError(f"User with ID {user_id} does not exist.")
 
             if user.sessions_count >= 10:
-                raise Exception("Maximum session limit (10) reached for this user.")
+                raise SessionLimitReachedException("Maximum session limit (10) reached for this user.")
 
             session = ChatSession(id=str(uuid.uuid4()), name = session_name,user_id=user_id)
             db.add(session)
